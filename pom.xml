@@ -1,25 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>twitter.bootstrap</groupId>
+	<groupId>com.github.twitter.bootstrap</groupId>
 	<artifactId>twitter-bootstrap</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
 	<name>twitter-bootstrap</name>
 	<description>twitter-bootstrap</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 		<bootstrap.output>${project.build.directory}/bootstrap</bootstrap.output>
 		<css.output>${bootstrap.output}/css</css.output>
 		<js.output>${bootstrap.output}/js</js.output>
 		<img.output>${bootstrap.output}/img</img.output>
-		
+
 		<bootstrap.less.input>${basedir}/less/bootstrap.less</bootstrap.less.input>
 		<bootstrap.css.output>${css.output}/bootstrap.css</bootstrap.css.output>
 		<bootstrap.css.min.output>${css.output}/bootstrap.min.css</bootstrap.css.min.output>
-		
+
 		<bootstrap.responsive.less.input>${basedir}/less/bootstrap.less</bootstrap.responsive.less.input>
 		<bootstrap.responsive.css.output>${css.output}/bootstrap-responsive.css</bootstrap.responsive.css.output>
 		<bootstrap.responsive.css.min.output>${css.output}/bootstrap-responsive.min.css</bootstrap.responsive.css.min.output>
@@ -29,43 +29,48 @@
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-resources-plugin</artifactId>
-        			<version>2.6</version>
-        		</plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
 				<plugin>
-            		<groupId>org.apache.maven.plugins</groupId>
-            		<artifactId>maven-antrun-plugin</artifactId>
-            		<version>1.7</version>
-            	</plugin>
-            	<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.2.1</version>
 				</plugin>
-            </plugins>
+				<plugin>
+					<groupId>com.github.bomas</groupId>
+					<artifactId>concat-maven-plugin</artifactId>
+					<version>0.0.1</version>				
+				</plugin>
+			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>re-create-bootstrap-dirt</id>
-                    <phase>process-resources</phase>
-                    <configuration>
-                        <tasks>
-                            <delete dir="${bootstrap.output}"/>
-                            <mkdir dir="${css.output}"/>
-                            <mkdir dir="${js.output}"/>
-                            <mkdir dir="${img.output}"/>
-                        </tasks>
-                    </configuration>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
-                </execution>
-            </executions>
-         </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>re-create-bootstrap-dirt</id>
+						<phase>process-resources</phase>
+						<configuration>
+							<tasks>
+								<delete dir="${bootstrap.output}" />
+								<mkdir dir="${css.output}" />
+								<mkdir dir="${js.output}" />
+								<mkdir dir="${img.output}" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -142,28 +147,78 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-resources-plugin</artifactId>        
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${img.output}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/img</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.bomas</groupId>
+				<artifactId>concat-maven-plugin</artifactId>
+				<configuration>
+					<appendNewline>true</appendNewline>
+					<outputFile>${bootstrap.output}/js/bootstrap.js</outputFile>
+					<concatFiles>
+						<param>js/bootstrap-affix.js</param>
+						<param>js/bootstrap-alert.js</param>
+						<param>js/bootstrap-button.js</param>
+						<param>js/bootstrap-carousel.js</param>
+						<param>js/bootstrap-collapse.js</param>
+						<param>js/bootstrap-dropdown.js</param>
+						<param>js/bootstrap-modal.js</param>
+						<param>js/bootstrap-popover.js</param>
+						<param>js/bootstrap-scrollspy.js</param>
+						<param>js/bootstrap-tab.js</param>
+						<param>js/bootstrap-tooltip.js</param>
+						<param>js/bootstrap-transition.js</param>
+						<param>js/bootstrap-typeahead.js</param>
+					</concatFiles>
+				</configuration>
+				<executions>
+					<execution>
+						<id>concat-js</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>concat</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+        		<artifactId>maven-assembly-plugin</artifactId>
+        		<version>2.3</version>
+        		<configuration>
+          			<descriptors>
+            			<descriptor>assembly.xml</descriptor>
+          			</descriptors>
+        		</configuration>
         		<executions>
           			<execution>
-            			<id>copy-resources</id>
-            			<phase>process-resources</phase>
+            			<id>make-assembly</id>
+            			<phase>package</phase>
             			<goals>
-              				<goal>copy-resources</goal>
+              				<goal>single</goal>
             			</goals>
-            			<configuration>
-              				<outputDirectory>${img.output}</outputDirectory>
-              				<resources>          
-                				<resource>
-                  					<directory>${basedir}/img</directory>
-                  					<filtering>false</filtering>
-                				</resource>
-              				</resources>              
-            			</configuration>            
           			</execution>
         		</executions>
       		</plugin>
 		</plugins>
 	</build>
 
-	
+
 </project>
