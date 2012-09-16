@@ -37,3 +37,4 @@ node_modules
 dist
 /target
 /.classpath
+/bin
