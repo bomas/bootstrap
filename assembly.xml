@@ -9,7 +9,29 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>target/bootstrap</directory>
+			<directory>/docs</directory>
+			<outputDirectory>/docs</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>/img</directory>
+			<outputDirectory>/img</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>/js</directory>
+			<outputDirectory>/js</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>/less</directory>
+			<outputDirectory>/less</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<includes>
+				<include>LICENSE</include>
+				<include>Makefile</include>
+				<include>package.json</include>
+				<include>README.md</include>
+			</includes>
+			<directory>/</directory>
 			<outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
