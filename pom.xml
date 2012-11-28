@@ -7,6 +7,7 @@
 	<packaging>pom</packaging>
 	<name>twitter-bootstrap</name>
 	<description>twitter-bootstrap</description>
+	
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +21,7 @@
 		<bootstrap.css.output>${css.output}/bootstrap.css</bootstrap.css.output>
 		<bootstrap.css.min.output>${css.output}/bootstrap.min.css</bootstrap.css.min.output>
 
-		<bootstrap.responsive.less.input>${basedir}/less/bootstrap.less</bootstrap.responsive.less.input>
+		<bootstrap.responsive.less.input>${basedir}/less/responsive.less</bootstrap.responsive.less.input>
 		<bootstrap.responsive.css.output>${css.output}/bootstrap-responsive.css</bootstrap.responsive.css.output>
 		<bootstrap.responsive.css.min.output>${css.output}/bootstrap-responsive.min.css</bootstrap.responsive.css.min.output>
 	</properties>
@@ -203,6 +204,7 @@
         		<artifactId>maven-assembly-plugin</artifactId>
         		<version>2.3</version>
         		<configuration>
+        			<appendAssemblyId>false</appendAssemblyId>
           			<descriptors>
             			<descriptor>assembly.xml</descriptor>
           			</descriptors>
@@ -215,6 +217,24 @@
               				<goal>single</goal>
             			</goals>
           			</execution>
+        		</executions>
+      		</plugin>
+      		<plugin>
+        		<artifactId>maven-install-plugin</artifactId>
+        		<version>2.3.1</version>
+        		<configuration>
+        			<classifier>zip</classifier>
+        			<file>${project.build.finalName}.zip</file>
+        			<packaging>zip</packaging>
+        		</configuration>
+        		<executions>
+	          		<execution>
+	            		<id>zip-install</id>
+	            		<phase>install</phase>
+	            		<goals>
+	              			<goal>install</goal>
+	            		</goals>
+	          		</execution>
         		</executions>
       		</plugin>
 		</plugins>
